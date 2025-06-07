@@ -34,8 +34,12 @@ class ScannerInfo:
         self.response = r.text
         self.adf_state = re.search(r'<scan:AdfState>(.+)</scan:AdfState>', r.text).group(1)
         self.scanner_state = re.search(r'<pwg:State>(.+)</pwg:State>', r.text).group(1)
-        self.last_job_id = re.search(r'<pwg:JobUuid>(.+)</pwg:JobUuid>', r.text).group(1)
-        self.last_job_state = re.search(r'<pwg:JobState>(.+)</pwg:JobState>', r.text).group(1)
+        self.last_job_id = re.search(r'<pwg:JobUuid>(.+)</pwg:JobUuid>', r.text)
+        if self.last_job_id:
+            self.last_job_id = self.last_job_id.group(1)
+        self.last_job_state = re.search(r'<pwg:JobState>(.+)</pwg:JobState>', r.text)
+        if self.last_job_state:
+            self.last_job_state = self.last_job_state.group(1)
 
     def print_info(self, include_response=False):
         print(f"ADF State: {self.adf_state}")
@@ -118,6 +122,8 @@ class ScannerInfo:
     def start_download(self):
         url = f"http://{self.ip}/eSCL/ScanJobs/{self.last_job_id}/NextDocument"
         r = requests.get(url)
+        if r.status_code != 200:
+            raise IOError(f"Failed to download document: {r.status_code} - {r.text}")
         filename = strftime(self.file_format, localtime()) + ".pdf"
         with open(f"{self.target_dir}/{filename}", mode="wb") as file:
             file.write(r.content)
