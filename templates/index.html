@@ -13,12 +13,6 @@
     Nmap Dashboard
   </header>
   <div class="module-box">
-
-    <div class="module" onclick="window.open('https\:\/\/www.w3schools.com', '_self');">
-      <div class="title">192.168.8.2:8000</div>
-      <div class="large-text">Paperless</div>
-    </div>
-  
     {% for module in modules %}
       <div class="module" onclick="window.open('http:\/\/{{ module.address }}', '_self');">
         <div class="title">{{ module.address }}</div>
@@ -26,6 +20,12 @@
       </div>
     {% endfor %}
 
+    {% if scanner %}
+      <div class="module" onclick="window.open('scanner', '_self');">
+        <div class="title">192.168.2.115/scanner</div>
+        <div class="large-text">Scanner</div>
+      </div>
+    {% endif %}
   </div>
 </body>
 </html>

@@ -133,7 +133,7 @@ class ScannerInfo:
         with open(f"{path}/{filename}", mode="wb") as file:
             file.write(r.content)
 
-def scan_document(use_subfolder=False):
+def pull_sheet(use_subfolder=False):
     while True:
         scanner = ScannerInfo()
         if scanner.is_adf_loaded() and scanner.is_scanner_idle():
@@ -144,6 +144,23 @@ def scan_document(use_subfolder=False):
             return
         time.sleep(5)
         print(".", end="", flush=True)
+
+def scan_document(duplex=False, verbose=False, ip=None):
+    if ip:
+        os.environ['IP_ADDRESS'] = ip
+    if duplex:
+        if verbose:
+            print("Insert stack for first pass")
+        pull_sheet(use_subfolder=True)
+
+        if verbose:
+            print("Insert stack for second pass")
+        pull_sheet(use_subfolder=True)
+        return
+
+    if verbose:
+        print("Insert single-sided stack into adf")
+    pull_sheet(use_subfolder=False)
 
 if __name__ == "__main__":
     while True:
@@ -156,10 +173,6 @@ if __name__ == "__main__":
             break
         
         if command == "s":
-            print("Insert single-sided stack into adf")
-            scan_document(use_subfolder=False)
+            scan_document(duplex=False, verbose=True)
         if command == "d":
-            print("Insert stack for first pass")
-            scan_document(use_subfolder=True)
-            print("Insert stack for second pass")
-            scan_document(use_subfolder=True)
+            scan_document(duplex=True, verbose=True)

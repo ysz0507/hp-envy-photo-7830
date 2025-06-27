@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scanner Duplex Control</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #response {
+      margin-top: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Start Scanner</h1>
+  <button onclick="sendRequest(true)">Scan Duplex</button>
+  <button onclick="sendRequest(false)">Scan Simplex</button>
+  <div id="response"></div>
+
+  <script>
+    function updateButtons(enabled) {
+      document.querySelectorAll("button").forEach(button => {
+        button.disabled = !enabled; 
+      });
+      if (enabled) {
+        document.getElementById("response").textContent = "Ready to scan.";
+      } else {
+        document.getElementById("response").textContent = "Scanning in progress...";
+      }
+    }
+    updateButtons(true); 
+
+    function sendRequest(duplex) {
+      updateButtons(false);
+      var url = duplex ? "scanner/duplex" : "scanner/simplex";
+      fetch(url, {
+        method: "POST"
+      }).finally(() => {
+        updateButtons(true);
+      });
+    }
+  </script>
+</body>
+</html>
