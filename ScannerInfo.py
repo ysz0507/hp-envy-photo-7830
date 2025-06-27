@@ -119,23 +119,47 @@ class ScannerInfo:
         </scan:ScanSettings>"""
         requests.post(url, glass_payload)
     
-    def start_download(self):
+    def start_download(self, use_subfolder=False):
         url = f"http://{self.ip}/eSCL/ScanJobs/{self.last_job_id}/NextDocument"
         r = requests.get(url)
         if r.status_code != 200:
             raise IOError(f"Failed to download document: {r.status_code} - {r.text}")
+        
+        path = self.target_dir
+        if use_subfolder:
+            path += "/double-sided"
+
         filename = strftime(self.file_format, localtime()) + ".pdf"
-        with open(f"{self.target_dir}/{filename}", mode="wb") as file:
+        with open(f"{path}/{filename}", mode="wb") as file:
             file.write(r.content)
 
-if __name__ == "__main__":
-    ScannerInfo().print_info()
+def scan_document(use_subfolder=False):
     while True:
         scanner = ScannerInfo()
         if scanner.is_adf_loaded() and scanner.is_scanner_idle():
             print("\nADF is loaded and scanner is idle. Starting scan.")
             scanner.start_adf_scan()
-            ScannerInfo().start_download()
-            print("Scan completed and file downloaded.")
+            print("Start file download")
+            ScannerInfo().start_download(use_subfolder=use_subfolder)
+            return
         time.sleep(5)
         print(".", end="", flush=True)
+
+if __name__ == "__main__":
+    while True:
+        command = input("Enter new command: [e]xit, [s]ingle, [d]uplex\n")
+        if command not in ("e", "s", "d"):
+            print("Invalid command")
+            continue
+        if command == "e":
+            print("Exit script")
+            break
+        
+        if command == "s":
+            print("Insert single-sided stack into adf")
+            scan_document(use_subfolder=False)
+        if command == "d":
+            print("Insert stack for first pass")
+            scan_document(use_subfolder=True)
+            print("Insert stack for second pass")
+            scan_document(use_subfolder=True)
