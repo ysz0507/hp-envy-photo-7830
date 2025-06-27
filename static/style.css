@@ -1,0 +1,46 @@
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+    .module-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .module {
+      background: #000;
+      border: 1px solid #0f0;
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 120px;
+      cursor: pointer;
+    }
+    .title {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #fff;
+      width: 100%;
+      margin: 20px;
+    }
+    .module .title {
+      margin: 0px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: rgb(24, 215, 24);
+    }
+    .large-text {
+      font-size: 2rem;
+      text-align: center;
+      margin: auto;
+    }
+    .row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
