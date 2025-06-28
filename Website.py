@@ -30,7 +30,7 @@ def landingpage(target="dashboard"):
 @app.route("/dashboard")
 def show_dashboard():
     devices = scan_network()
-    return render_template("index.html", modules=devices, scanner=True)
+    return render_template("index.html", modules=devices)
 
 @app.route("/scanner")
 def scanning():

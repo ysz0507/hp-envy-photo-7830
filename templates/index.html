@@ -18,14 +18,16 @@
         <div class="title">{{ module.address }}</div>
         <div class="large-text">{{ module.host }}</div>
       </div>
-    {% endfor %}
 
-    {% if scanner %}
+      {% if module.host == "HP29B84D" %}
       <div class="module" onclick="window.open('scanner', '_self');">
         <div class="title">192.168.2.115/scanner</div>
-        <div class="large-text">Scanner</div>
+        <div class="large-text">Paperless Scanner</div>
       </div>
-    {% endif %}
+      {% endif %}
+    {% endfor %}
+
+
   </div>
 </body>
 </html>
