@@ -25,7 +25,6 @@
       font-size: 4rem;
       font-weight: bold;
       color: #fff;
-      width: 100%;
       margin: 20px;
     }
     .module .title {
@@ -43,4 +42,23 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
+    }
+    button {
+      margin: 20px;
+      padding: 20px 40px;
+      font-size: 16px;
+      cursor: pointer;
+      border-color: rgb(24, 215, 24);
+      background-color: #5d5d5d;
+      color: white;
+      border-radius: 10px;
+    }
+    button:disabled {
+      background-color: #a7a7a7;
+      border-color: #a7a7a7;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background-color: rgb(24, 215, 24);
+      color: black;
     }
